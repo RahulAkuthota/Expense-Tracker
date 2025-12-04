@@ -1,0 +1,253 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Teacker</title>
+</head>
+<body>
+ 
+    <h2>Expense Tracker</h2>
+
+    <input type="text" placeholder="Expense Name" id="name" required> 
+    <input type="number" placeholder="Amount" id="amount" required>
+    <button onclick="addExpense()">Add Expense</button>
+ 
+
+    <div id="showdata"></div>
+    <div id="showtotal"></div>
+
+    <script >
+
+
+let name=document.getElementById("name");
+let amount=document.getElementById("amount");
+let sum=JSON.parse(localStorage.getItem("sum")) ||0;
+let arr=JSON.parse(localStorage.getItem("expense")) || [];;
+
+function addExpense(){
+let addname=name.value;
+let addamount=parseInt(amount.value);
+ 
+if (!addname || isNaN(addamount)) {
+    
+    return;
+}
+
+
+arr.push({addname,addamount});
+localStorage.setItem("expense", JSON.stringify(arr));
+sum=sum+addamount;
+localStorage.setItem("sum", JSON.stringify(sum));
+ 
+showTasks(arr);
+name.value="";
+amount.value="";
+
+ 
+}
+
+
+function showTasks(arr){
+    document.getElementById("showdata").innerHTML= arr.map((obj,index)=>{
+      
+     return `<div> ${obj.addname} ${obj.addamount} <button onclick="remove(${index})">Delete</button></div> </br>`
+     }).join("");
+     document.getElementById("showtotal").innerHTML=`Total Amount - ${sum}`;
+ }
+ 
+ function remove(index){
+    sum=sum-arr[index].addamount;
+    localStorage.setItem("sum", JSON.stringify(sum));
+     arr.splice(index,1);
+     
+     localStorage.setItem("expense", JSON.stringify(arr));
+     showTasks(arr);
+ }
+
+ showTasks(arr);
+
+    </script>
+
+
+    
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 48%;
+            padding: 10px;
+            margin: 5px 1%;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #27ae60;
+            box-shadow: 0 0 5px rgba(39, 174, 96, 0.5);
+        }
+
+        #button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            background: #27ae60;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #219150;
+        }
+
+        #showdata {
+            margin-top: 20px;
+        }
+
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            background: #ecf0f1;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .expense-name {
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .expense-amount {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            border: none;
+            padding: 4px 8px;   /* smaller padding */
+            color: white;
+            font-size: 11px;    /* smaller text */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+        
+        
+
+        #showtotal {
+            margin-top: 15px;
+            font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+            color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+ 
+    <div class="container">
+        <h2>Expense Tracker</h2>
+
+        <input type="text" placeholder="Expense Name" id="name" required> 
+        <input type="number" placeholder="Amount" id="amount" required>
+        <button onclick="addExpense()" id="button">Add Expense</button>
+
+        <div id="showdata"></div>
+        <div id="showtotal"></div>
+    </div>
+
+    <script>
+        let name=document.getElementById("name");
+        let amount=document.getElementById("amount");
+        let sum=JSON.parse(localStorage.getItem("sum")) ||0;
+        let arr=JSON.parse(localStorage.getItem("expense")) || [];
+
+        function addExpense(){
+            let addname=name.value;
+            let addamount=parseInt(amount.value);
+            
+            if (!addname || isNaN(addamount)) return;
+
+            arr.push({addname,addamount});
+            localStorage.setItem("expense", JSON.stringify(arr));
+            sum=sum+addamount;
+            localStorage.setItem("sum", JSON.stringify(sum));
+
+            showTasks(arr);
+            name.value="";
+            amount.value="";
+        }
+
+        function showTasks(arr){
+            document.getElementById("showdata").innerHTML= arr.map((obj,index)=>{
+                return `
+                <div class="expense-item">
+                    <span class="expense-name">${obj.addname}</span>
+                    <span class="expense-amount">₹${obj.addamount}</span>
+                    <button class="delete-btn" onclick="remove(${index})">Delete</button>
+                </div>`;
+            }).join("");
+
+            document.getElementById("showtotal").innerHTML=`Total Amount: ₹${sum}`;
+        }
+
+        function remove(index){
+            sum=sum-arr[index].addamount;
+            localStorage.setItem("sum", JSON.stringify(sum));
+            arr.splice(index,1);
+            localStorage.setItem("expense", JSON.stringify(arr));
+            showTasks(arr);
+        }
+
+        showTasks(arr);
+    </script>
+    
+</body>
+</html>
